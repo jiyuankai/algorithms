@@ -53,3 +53,25 @@ class Solution:
             node.right = helper(node.right, node.next.left if node.next else None)
             return node
         return helper(root, None)
+
+'''
+3）循环
+对于非叶子节点，它的左孩子next指向右孩子，右孩子指向它的next对应节点的左孩子。
+'''
+
+
+class Solution:
+
+    def connect(self, root: 'Node') -> 'Node':
+        if not root:
+            return None
+        node = root
+        while node.left:
+            head = node
+            while head:
+                head.left.next = head.right
+                if head.next:
+                    head.right.next = head.next.left
+                head = head.next
+            node = node.left
+        return root
