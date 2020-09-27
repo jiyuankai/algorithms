@@ -42,8 +42,6 @@ class Solution:
 class Solution:
 
     def connect(self, root: 'Node') -> 'Node':
-        if not root:
-            return None
 
         def helper(node, next):
             if not node:
@@ -75,3 +73,47 @@ class Solution:
                 head = head.next
             node = node.left
         return root
+
+
+# 117. Populating Next Right Pointers in Each Node II
+"""
+层序遍历，略
+
+和116思路类似，但是因为此时树不是完美二叉树，所以下一层的起点不一定在最左孩子。
+从根节点开始，通过遍历第n层，可以构建出n+1层的链表。每一层看作是一次链表遍历
+三个变量
+head：下一层链表的头结点
+prev：前驱节点
+cur： 当前层的游标，用来遍历当前层链表
+"""
+
+
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        head = root
+        while head:
+            # 从head头结点开始遍历
+            cur = head
+            # 此时head被赋予新的含义，即下一层的头结点
+            # prev是遍历下一层的游标
+            prev = head = None
+            while cur:
+                # 1）若prev尚未被赋值，说明遇到的是下一层的起始节点
+                # head当前层的左/右孩子即为下一层的链表头，prev指向头，初始化
+                # 2）若prev已经赋值，说明已经初始化，将他指向下一节点
+                if cur.left:
+                    if prev:
+                        prev.next = cur.left
+                        prev = prev.next
+                    else:
+                        prev = head = cur.left
+                if cur.right:
+                    if prev:
+                        prev.next = cur.right
+                        prev = prev.next
+                    else:
+                        prev = head = cur.right
+                cur = cur.next
+        return root
+
+
